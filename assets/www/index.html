@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title></title>
+        <link rel="stylesheet" href="jquery.mobile/jquery.mobile-1.1.0.min.css"/>
+        <link rel="stylesheet" href="my.css" />
+        <style>
+            /* App custom styles */
+            .alert{ margin-top:20%; }
+            .tweet{ visibility:hidden; }    
+        </style>
+        <script src="jquery.mobile/jquery-1.7.2.min"></script>
+        <script src="jquery.mobile/jquery.mobile-1.1.0.min"></script>
+		<script src="my.js"></script>
+		<script src="cordova-2.0.0.js"></script>
+		<script type="text/javascript" src="jquery.mobile/jquery.json-2.3.min.js"></script>
+        <script type="text/javascript" src="js/agenda.js"></script>
+        <script>
+			document.addEventListener("deviceready", onDeviceReady, false);
+			function onDeviceReady() {
+				checkConnection();
+			}
+			
+			function checkConnection() {
+				var networkState = navigator.network.connection.type;
+				if(networkState == Connection.NONE){
+                    navigator.notification.alert("Internet Indisponível", null, "We Web Conf", "Ok");
+                    checkDomain();
+                }
+                else{
+                    checkDomain();
+                }
+			}
+
+            //checkDomain(); DESKTOP DEBUG
+
+            $(document).ready(function(){
+                $('.hide').hide();
+            });
+
+            function showAbout(){
+                $("#main-menu, #about-menu").toggle();
+            }
+		</script>
+        <script type="text/javascript" src="js/trends.js"></script>
+    </head>
+    
+    <body>
+        <!-- Home -->
+        <div data-role="page" id="page1">
+            <div data-theme="c" data-role="header">
+                <span class="ui-title">
+                    <div style=" text-align:center">
+                        <img style="width: 125px; height: 40px" src="images/logo.png">
+                    </div>
+                </span>
+            </div>
+            <div data-role="content" style="padding: 15px">               
+                <ul id="main-menu" data-role="listview" data-divider-theme="c" data-inset="true">
+                    <li id="talks-page" data-theme="c"><a href="#page5" data-rel="page" data-transition="none">
+                        Palestras
+                    </a></li>
+                    <li id="courses-page" data-theme="c"><a href="#page7" data-rel="page" data-transition="none">
+                        Cursos  
+                    </a></li>
+                    <li data-theme="c"><a href="#page6" data-rel="page" data-transition="none" onclick="trends();">
+                        We Web Trends
+                    </a></li>                 
+                </ul>
+
+                <ul id="about-menu"  class="hide"data-role="listview" data-divider-theme="c" data-inset="true">
+                    <li><a href="http://www.zertico.com.br">
+                            <img src="images/zertico.png" />
+                            <h3>Zertico Cloud Solutions</h3>
+                            <p>Produção</p>
+                    </a></li>
+                    <li><a href="http://www.keeplay.com.br">
+                        <img src="images/keeplay.png" />
+                        <h3>Keeplay Game Studios</h3>
+                        <p>Distribuição</p>
+                    </a></li>                  
+                </ul>                        
+            </div>
+            <div data-role="footer" data-theme="c" data-position="fixed">       
+                <div data-role="navbar" data-iconpos="top">
+                    <ul><li><a href="" data-icon="info" onclick="showAbout();">Sobre</a></li></ul>
+                </div><!-- /navbar -->
+            </div><!-- /footer -->
+        </div>
+
+        <!-- Talks -->
+        <div data-role="page" id="page5">
+            <div data-theme="c" data-role="header">
+                <span class="ui-title">
+                	<div style=" text-align:center">
+	                    <img style="width: 125px; height: 40px" src="images/logo.png">
+	                </div>
+                </span>
+            </div>
+            <div data-role="content" style="padding: 15px">
+            	<ul id="list-speakers" data-role="listview" data-theme="c" data-divider-theme="d"></ul>
+                <span><center><h3 class="alert">Conecte a rede</h3></center></span>
+                <span><center><button class="alert" onclick="refreshTalk();">Recarregar</button></center></span>
+	        </div>
+	        <div data-role="footer" data-theme="c" data-position="fixed">		
+				<div data-role="navbar" data-iconpos="top">
+					<ul>
+						<li><a href="" data-rel="back" data-icon="home">Home</a></li>
+					</ul>
+				</div><!-- /navbar -->
+			</div><!-- /footer -->
+        </div>
+        
+        <!-- Courses -->
+        <div data-role="page" id="page7">
+            <div data-theme="c" data-role="header">
+                <span class="ui-title">
+                	<div style=" text-align:center">
+	                    <img style="width: 125px; height: 40px" src="images/logo.png">
+	                </div>
+                </span>
+            </div>
+            <div data-role="content" style="padding: 15px">
+            	<ul id="list-courses" data-role="listview" data-theme="c" data-divider-theme="d"></ul>
+                <span><center><h3 class="alert">Conecte a rede</h3></center></span>
+                <span><center><button class="alert" onclick="checkDomain();">Recarregar</button></center></span>
+            </div>
+			<div data-role="footer" data-theme="c" data-position="fixed">		
+				<div data-role="navbar" data-iconpos="top">
+					<ul>
+						<li><a href="" data-rel="back" data-icon="home">Home</a></li>
+                    </ul>
+				</div><!-- /navbar -->
+			</div><!-- /footer -->
+        </div>
+        
+        <!-- Trends -->
+        <div data-role="page" id="page6" data-theme="c">
+            <div data-theme="c" data-role="header">
+                <span class="ui-title">
+                	<div style=" text-align:center">
+                    	<img style="width: 125px; height: 40px" src="images/logo.png">
+                	</div>
+                </span>
+            </div>
+            <div data-role="content" style="padding: 15px">
+              <div>
+              	<ul data-role="listview" id="trends-list" data-divider-theme="d">
+              		<li data-role="list-divider">We Web Trends </li>
+              	</ul>
+              	<span><center><h3 class="alert">Loading...</h3></center></span>
+              </div>
+            </div>
+
+			<div data-role="footer" data-theme="c" data-position="fixed">		
+					<div data-role="navbar" data-iconpos="top">
+						<ul>
+							<li><a href="" data-rel="back" data-icon="home">Home</a></li>
+							<li><a href="" data-icon="refresh" onclick="trendsRefresh();">Refresh</a></li>
+						</ul>
+					</div><!-- /navbar -->
+				</div><!-- /footer -->
+
+        </div>
+
+
+		<!-- Tweet Dialog -->
+		<div id="tweet-dialog" data-role="dialog">		
+			<div data-role="header" data-theme="d">
+				<h1>Tweet</h1>
+			</div>
+			<div data-role="content" data-theme="c">
+				<ul id="tweet-info" style="list-style:none; padding:0px;"></ul>
+				<a href="#page6" data-role="button" data-rel="back" data-theme="b">Fechar</a>    
+			</div>
+		</div>
+
+
+        <!-- Talk Dialog -->
+        <div id="talk-dialog" data-role="dialog">      
+            <div data-role="header" data-theme="d">
+                <h1>Talk</h1>
+            </div>
+            <div data-role="content" data-theme="c">
+                <ul id="talk-info" style="list-style:none; padding:0px;"></ul>   
+                <a href="#page5" data-role="button" data-rel="back" data-theme="b">Fechar</a>    
+            </div>
+        </div>
+       
+
+        <!-- Course Dialog -->
+        <div id="course-dialog" data-role="dialog">      
+            <div data-role="header" data-theme="d">
+                <h1>Curso</h1>
+            </div>
+            <div data-role="content" data-theme="c">
+                <ul id="course-info" style="list-style:none; padding:0px;"></ul>
+                <a href="#page7" data-role="button" data-rel="back" data-theme="b">Fechar</a>    
+            </div>
+        </div>                              
+    </body>
+</html>
